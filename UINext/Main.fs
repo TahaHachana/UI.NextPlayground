@@ -15,7 +15,7 @@ module Controls =
         inherit Web.Control()
 
         [<JavaScript>]
-        override __.Body = //IntelliFactory.WebSharper.Html.Default.Div [] :> _
+        override __.Body =
             Client.main() :> _
 
 module Skin =
@@ -53,22 +53,12 @@ module Site =
     let HomePage =
         Skin.WithTemplate "" <| fun ctx ->
             [
-//                Div [Text "Hello"]
                 Div [new Controls.EntryPoint()]
-//                Links ctx
-            ]
-
-    let AboutPage =
-        Skin.WithTemplate "AboutPage" <| fun ctx ->
-            [
-                Div [Text "ABOUT"]
-                Links ctx
             ]
 
     let Main =
         Sitelet.Sum [
             Sitelet.Content "/" Home HomePage
-            Sitelet.Content "/About" About AboutPage
         ]
 
 [<Sealed>]
