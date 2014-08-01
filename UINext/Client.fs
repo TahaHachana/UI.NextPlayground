@@ -1,4 +1,4 @@
-namespace UINext
+namespace Sitelet
 
 open IntelliFactory.WebSharper
 open IntelliFactory.WebSharper.UI.Next
@@ -245,12 +245,14 @@ module Bar =
                 Attr.Animated "x" trans (View.Map id <| View.Const(xScale.Apply(index))) string
             ] []
             SvgElements.Text [
-                Attr.Create "text-anchor" "middle"
-                Attr.Create "font-family" "sans-serif"
-                Attr.Create "font-size" "11px"
-                Attr.Create "fill" "white"
-                Attr.Animated "x" trans (View.Map id <| View.Const(xScale.Apply(index) + 7.)) string
-                Attr.Create "y" (string <| h - yScale.Apply(x) + 15.)
+                yield Attr.Create "text-anchor" "middle"
+                yield Attr.Create "font-family" "sans-serif"
+                yield Attr.Create "font-size" "11px"
+                yield Attr.Create "fill" "white"
+                match (datum.OldIndex) = index with
+                | false -> yield Attr.Animated "x" trans (View.Map id <| View.Const(xScale.Apply(index) + 7.)) string
+                | true -> yield Attr.Create "x" <| string (xScale.Apply(index) + 7.)
+                yield Attr.Create "y" (string <| h - yScale.Apply(x) + 15.)
             ] [Doc.TextNode (string x)]
         ]
 

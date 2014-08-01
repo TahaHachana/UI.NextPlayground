@@ -1,4 +1,4 @@
-namespace UINext
+namespace Sitelet
 
 open IntelliFactory.Html
 open IntelliFactory.WebSharper

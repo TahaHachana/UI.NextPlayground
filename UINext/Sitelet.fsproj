@@ -31,7 +31,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <Name>UINext</Name>
+    <Name>Sitelet</Name>
     <RootNamespace>UINext</RootNamespace>
     <AssemblyName>UINext</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
@@ -111,12 +111,9 @@
     <Error Condition="!Exists('..\packages\WebSharper.2.5.119.54\build\WebSharper.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\WebSharper.2.5.119.54\build\WebSharper.targets'))" />
   </Target>
   <ItemGroup>
-    <Compile Include="Remoting.fs" />
     <Compile Include="Client.fs" />
     <Compile Include="Main.fs" />
     <Content Include="Main.html" />
-    <Content Include="Web.config" />
-    <Content Include="Global.asax" />
     <Content Include="Setup.fsx" />
     <None Include="packages.config" />
     <None Include="style.css" />
