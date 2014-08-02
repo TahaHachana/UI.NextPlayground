@@ -1,6 +1,6 @@
 (function()
 {
- var Global=this,Runtime=this.IntelliFactory.Runtime,WebSharper,Arrays,Sitelet,Bar,d3,IntrinsicFunctionProxy,UI,Next,Var1,Order,Var,View1,Doc,Html,List,Attr,T,Number,Trans,SvgElements,View,Seq,An,Interpolation,Easing,JQueryUI,SliderConfiguration,Slider,GoogleDashboard,Html1,Operators,Default,Hello,Scatter,Phoneword,Client,Gender,Unchecked,google,visualization,DataTable,document,PieChart,Table,Strings,String,Point,Key,Model1,Model,Collections,ResizeArray,ResizeArrayProxy,PointModel,setInterval,Math,Operators1;
+ var Global=this,Runtime=this.IntelliFactory.Runtime,WebSharper,Arrays,Sitelet,Bar,d3,IntrinsicFunctionProxy,UI,Next,Var1,Order,Var,View1,Doc,Html,List,Attr,T,Number,Trans,SvgElements,View,Seq,An,Interpolation,Easing,JQueryUI,SliderConfiguration,Slider,GoogleDashboard,Html1,Operators,Default,Slider1,Client,Gender,Unchecked,google,visualization,DataTable,document,PieChart,Table,Hello,Phoneword,Strings,String,Scatter,Point,Key,Model1,Model,Collections,ResizeArray,ResizeArrayProxy,PointModel,setInterval,Math,Operators1,jQuery,clearInterval;
  Runtime.Define(Global,{
   Sitelet:{
    Bar:{
@@ -247,22 +247,10 @@
        return Var.Set(arg00,arg10);
       }))([values[0],values[1]]);
      });
-     x=Operators.add(Default.Div(List.ofArray([Default.Attr().Class("container")])),List.ofArray([Operators.add(Default.Div(List.ofArray([Default.Attr().Class("example")])),List.ofArray([Default.H1(List.ofArray([Default.Text("Hello"),Default.Attr().Class("page-header")])),Default.Div(List.ofArray([Default.Attr().NewAttr("id","hello")]))])),Default.Hr(Runtime.New(T,{
-      $:0
-     })),Operators.add(Default.Div(List.ofArray([Default.Attr().Class("example")])),List.ofArray([Default.H1(List.ofArray([Default.Text("Dynamic Scatterplot"),Default.Attr().Class("page-header")])),Default.Div(List.ofArray([Default.Attr().NewAttr("id","scatter")]))])),Default.Hr(Runtime.New(T,{
-      $:0
-     })),Operators.add(Default.Div(List.ofArray([Default.Attr().Class("example")])),List.ofArray([Default.H1(List.ofArray([Default.Text("Phoneword"),Default.Attr().Class("page-header")])),Default.Div(List.ofArray([Default.Attr().NewAttr("id","phoneword")]))])),Default.Hr(Runtime.New(T,{
-      $:0
-     })),Operators.add(Default.Div(List.ofArray([Default.Attr().Class("example")])),List.ofArray([Default.H1(List.ofArray([Default.Text("Bar"),Default.Attr().Class("page-header")])),Default.Div(List.ofArray([Default.Attr().NewAttr("id","bar")])),Default.Div(List.ofArray([Default.Attr().NewAttr("id","bar-chart")]))])),Default.Hr(Runtime.New(T,{
-      $:0
-     })),Operators.add(Default.Div(List.ofArray([Default.Attr().Class("example")])),List.ofArray([Default.H1(List.ofArray([Default.Text("Google Dashboard"),Default.Attr().Class("page-header")])),Operators.add(Default.Div(List.ofArray([Default.Attr().Class("row"),Default.Attr().NewAttr("style","margin-bottom:50px;")])),List.ofArray([Operators.add(Default.Div(List.ofArray([Default.Attr().Class("col-md-6")])),List.ofArray([Default.Div(List.ofArray([Default.Attr().NewAttr("id","min-max")])),Default.Div(List.ofArray([slider]))])),Operators.add(Default.Div(List.ofArray([Default.Attr().Class("col-md-6")])),List.ofArray([Default.Div(List.ofArray([Default.Attr().NewAttr("id","google-dash")]))]))])),Operators.add(Default.Div(List.ofArray([Default.Attr().Class("row")])),List.ofArray([Operators.add(Default.Div(List.ofArray([Default.Attr().Class("col-md-6")])),List.ofArray([Default.Div(List.ofArray([Default.Attr().NewAttr("style","height: 400px;"),Default.Attr().NewAttr("id","google-pie")]))])),Operators.add(Default.Div(List.ofArray([Default.Attr().Class("col-md-6")])),List.ofArray([Default.Div(List.ofArray([Default.Attr().NewAttr("style","height: 400px;"),Default.Attr().NewAttr("id","google-table")]))]))])),Default.Div(List.ofArray([Default.Attr().NewAttr("id","google")]))]))]));
+     x=Operators.add(Default.Div(List.ofArray([Default.Attr().Class("container")])),List.ofArray([Operators.add(Default.Div(List.ofArray([Default.Attr().Class("example")])),List.ofArray([Default.H1(List.ofArray([Default.Text("Slider"),Default.Attr().Class("page-header")])),Operators.add(Default.Div(List.ofArray([Default.Attr().NewAttr("id","slider-container")])),List.ofArray([Default.Div(List.ofArray([Default.Attr().NewAttr("id","slider")]))]))]))]));
      Operators.OnAfterRender(function()
      {
-      Doc.RunById("hello",Hello.main());
-      Scatter.main();
-      Doc.RunById("phoneword",Phoneword.main());
-      Bar.main();
-      return GoogleDashboard.main();
+      return Slider1.main();
      },x);
      return x;
     }
@@ -686,6 +674,323 @@
     {
      return 500;
     })
+   },
+   Slider:{
+    fade:Runtime.Field(function()
+    {
+     var arg00,arg10;
+     arg00=Interpolation.get_Double();
+     arg10=Easing.get_CubicInOut();
+     return function(arg30)
+     {
+      return function(arg40)
+      {
+       return An.Simple(arg00,arg10,1000,arg30,arg40);
+      };
+     };
+    }),
+    fadeInTrans:Runtime.Field(function()
+    {
+     return Trans.Enter(function()
+     {
+      return((Slider1.fade())(0))(1);
+     },Trans.Create(Slider1.fade()));
+    }),
+    fadeOutTrans:Runtime.Field(function()
+    {
+     return Trans.Enter(function()
+     {
+      return((Slider1.fade())(1))(0);
+     },Trans.Create(Slider1.fade()));
+    }),
+    main:function()
+    {
+     var x,timer;
+     Doc.RunById("slider",Doc.EmbedView(View1.Map(function(settings)
+     {
+      return Slider1.render(settings);
+     },Slider1.settingsVar().get_View())));
+     x=setInterval(function()
+     {
+      var settingsVal,matchValue,matchValue1,x1,y,x2,y1,x3,y2;
+      settingsVal=Var1.Get(Slider1.settingsVar());
+      matchValue=settingsVal.Hover;
+      if(matchValue)
+       {
+        return null;
+       }
+      else
+       {
+        matchValue1=settingsVal.Imgs;
+        if(matchValue1[0]===6)
+         {
+          if(matchValue1[1]===7)
+           {
+            return Var.Set(Slider1.settingsVar(),{
+             Imgs:[7,1],
+             Hover:settingsVal.Hover,
+             Direction:settingsVal.Direction
+            });
+           }
+          else
+           {
+            x1=matchValue1[0];
+            y=matchValue1[1];
+            return Var.Set(Slider1.settingsVar(),{
+             Imgs:[x1+1,y+1],
+             Hover:settingsVal.Hover,
+             Direction:settingsVal.Direction
+            });
+           }
+         }
+        else
+         {
+          if(matchValue1[0]===7)
+           {
+            if(matchValue1[1]===1)
+             {
+              return Var.Set(Slider1.settingsVar(),{
+               Imgs:[1,2],
+               Hover:settingsVal.Hover,
+               Direction:settingsVal.Direction
+              });
+             }
+            else
+             {
+              x2=matchValue1[0];
+              y1=matchValue1[1];
+              return Var.Set(Slider1.settingsVar(),{
+               Imgs:[x2+1,y1+1],
+               Hover:settingsVal.Hover,
+               Direction:settingsVal.Direction
+              });
+             }
+           }
+          else
+           {
+            x3=matchValue1[0];
+            y2=matchValue1[1];
+            return Var.Set(Slider1.settingsVar(),{
+             Imgs:[x3+1,y2+1],
+             Hover:settingsVal.Hover,
+             Direction:settingsVal.Direction
+            });
+           }
+         }
+       }
+     },2000);
+     timer=Var1.Create(x);
+     return jQuery("#slider, #prev-slide, #next-slide").hover(function()
+     {
+      return clearInterval(Var1.Get(timer));
+     },function()
+     {
+      return Var.Set(timer,setInterval(function()
+      {
+       var settingsVal,matchValue,matchValue1,arg00,Direction,x1,y,arg001,Direction1,arg002,Direction2,x2,y1,arg003,Direction3,x3,y2,arg004,Direction4;
+       settingsVal=Var1.Get(Slider1.settingsVar());
+       matchValue=settingsVal.Hover;
+       if(matchValue)
+        {
+         return null;
+        }
+       else
+        {
+         matchValue1=settingsVal.Imgs;
+         if(matchValue1[0]===6)
+          {
+           if(matchValue1[1]===7)
+            {
+             arg00=Slider1.settingsVar();
+             Direction={
+              $:1
+             };
+             return Var.Set(arg00,{
+              Imgs:[7,1],
+              Hover:settingsVal.Hover,
+              Direction:Direction
+             });
+            }
+           else
+            {
+             x1=matchValue1[0];
+             y=matchValue1[1];
+             arg001=Slider1.settingsVar();
+             Direction1={
+              $:1
+             };
+             return Var.Set(arg001,{
+              Imgs:[x1+1,y+1],
+              Hover:settingsVal.Hover,
+              Direction:Direction1
+             });
+            }
+          }
+         else
+          {
+           if(matchValue1[0]===7)
+            {
+             if(matchValue1[1]===1)
+              {
+               arg002=Slider1.settingsVar();
+               Direction2={
+                $:1
+               };
+               return Var.Set(arg002,{
+                Imgs:[1,2],
+                Hover:settingsVal.Hover,
+                Direction:Direction2
+               });
+              }
+             else
+              {
+               x2=matchValue1[0];
+               y1=matchValue1[1];
+               arg003=Slider1.settingsVar();
+               Direction3={
+                $:1
+               };
+               return Var.Set(arg003,{
+                Imgs:[x2+1,y1+1],
+                Hover:settingsVal.Hover,
+                Direction:Direction3
+               });
+              }
+            }
+           else
+            {
+             x3=matchValue1[0];
+             y2=matchValue1[1];
+             arg004=Slider1.settingsVar();
+             Direction4={
+              $:1
+             };
+             return Var.Set(arg004,{
+              Imgs:[x3+1,y2+1],
+              Hover:settingsVal.Hover,
+              Direction:Direction4
+             });
+            }
+          }
+        }
+      },2000));
+     });
+    },
+    render:function(settings)
+    {
+     return Doc.Concat(Seq.toList(Seq.delay(function()
+     {
+      var matchValue,_,arg30,arg301,arg302,arg303;
+      matchValue=settings.Direction;
+      if(matchValue.$==0)
+       {
+        arg30=function(value)
+        {
+         return Global.String(value);
+        };
+        arg301=function(value)
+        {
+         return Global.String(value);
+        };
+        _=[Doc.Concat(List.ofArray([Doc.Element("img",List.ofArray([Attr.Create("src","http://placekitten.com/200/200?image="+Global.String(settings.Imgs[0])),Attr.AnimatedStyle("opacity",Slider1.fadeInTrans(),View.Const(1),arg30)]),Runtime.New(T,{
+         $:0
+        })),Doc.Element("img",List.ofArray([Attr.Create("src","http://placekitten.com/200/200?image="+Global.String(settings.Imgs[1])),Attr.AnimatedStyle("opacity",Slider1.fadeOutTrans(),View.Const(0),arg301)]),Runtime.New(T,{
+         $:0
+        }))]))];
+       }
+      else
+       {
+        arg302=function(value)
+        {
+         return Global.String(value);
+        };
+        arg303=function(value)
+        {
+         return Global.String(value);
+        };
+        _=[Doc.Concat(List.ofArray([Doc.Element("img",List.ofArray([Attr.Create("src","http://placekitten.com/200/200?image="+Global.String(settings.Imgs[0])),Attr.AnimatedStyle("opacity",Slider1.fadeOutTrans(),View.Const(0),arg302)]),Runtime.New(T,{
+         $:0
+        })),Doc.Element("img",List.ofArray([Attr.Create("src","http://placekitten.com/200/200?image="+Global.String(settings.Imgs[1])),Attr.AnimatedStyle("opacity",Slider1.fadeInTrans(),View.Const(1),arg303)]),Runtime.New(T,{
+         $:0
+        }))]))];
+       }
+      return Seq.append(_,Seq.delay(function()
+      {
+       var arg10;
+       arg10=List.ofArray([Attr.Create("id","prev-slide")]);
+       return Seq.append([Doc.Link("Prev",arg10,function()
+       {
+        var matchValue1,arg00,inputRecord,matchValue2,arg001,inputRecord1;
+        matchValue1=Slider1.settingsVar().get_Value().Direction;
+        if(matchValue1.$==0)
+         {
+          arg00=Slider1.settingsVar();
+          inputRecord=Slider1.settingsVar().get_Value();
+          matchValue2=Slider1.settingsVar().get_Value().Imgs;
+          return Var.Set(arg00,{
+           Imgs:matchValue2[0]===1?matchValue2[1]===2?[7,1]:[matchValue2[0]-1,matchValue2[1]-1]:matchValue2[0]===7?matchValue2[1]===1?[6,7]:[matchValue2[0]-1,matchValue2[1]-1]:[matchValue2[0]-1,matchValue2[1]-1],
+           Hover:inputRecord.Hover,
+           Direction:inputRecord.Direction
+          });
+         }
+        else
+         {
+          arg001=Slider1.settingsVar();
+          inputRecord1=Slider1.settingsVar().get_Value();
+          return Var.Set(arg001,{
+           Imgs:inputRecord1.Imgs,
+           Hover:inputRecord1.Hover,
+           Direction:{
+            $:0
+           }
+          });
+         }
+       })],Seq.delay(function()
+       {
+        var arg101;
+        arg101=List.ofArray([Attr.Create("id","next-slide")]);
+        return[Doc.Link("Next",arg101,function()
+        {
+         var matchValue1,arg00,inputRecord,matchValue2,arg001,inputRecord1;
+         matchValue1=Slider1.settingsVar().get_Value().Direction;
+         if(matchValue1.$==1)
+          {
+           arg00=Slider1.settingsVar();
+           inputRecord=Slider1.settingsVar().get_Value();
+           matchValue2=Slider1.settingsVar().get_Value().Imgs;
+           return Var.Set(arg00,{
+            Imgs:matchValue2[0]===6?matchValue2[1]===7?[7,1]:[matchValue2[0]+1,matchValue2[1]+1]:matchValue2[0]===7?matchValue2[1]===1?[1,2]:[matchValue2[0]+1,matchValue2[1]+1]:[matchValue2[0]+1,matchValue2[1]+1],
+            Hover:inputRecord.Hover,
+            Direction:inputRecord.Direction
+           });
+          }
+         else
+          {
+           arg001=Slider1.settingsVar();
+           inputRecord1=Slider1.settingsVar().get_Value();
+           return Var.Set(arg001,{
+            Imgs:inputRecord1.Imgs,
+            Hover:inputRecord1.Hover,
+            Direction:{
+             $:1
+            }
+           });
+          }
+        })];
+       }));
+      }));
+     })));
+    },
+    settingsVar:Runtime.Field(function()
+    {
+     return Var1.Create({
+      Imgs:[1,2],
+      Hover:false,
+      Direction:{
+       $:1
+      }
+     });
+    })
    }
   }
  });
@@ -723,9 +1028,7 @@
   Html1=Runtime.Safe(WebSharper.Html);
   Operators=Runtime.Safe(Html1.Operators);
   Default=Runtime.Safe(Html1.Default);
-  Hello=Runtime.Safe(Sitelet.Hello);
-  Scatter=Runtime.Safe(Sitelet.Scatter);
-  Phoneword=Runtime.Safe(Sitelet.Phoneword);
+  Slider1=Runtime.Safe(Sitelet.Slider);
   Client=Runtime.Safe(Sitelet.Client);
   Gender=Runtime.Safe(GoogleDashboard.Gender);
   Unchecked=Runtime.Safe(WebSharper.Unchecked);
@@ -735,8 +1038,11 @@
   document=Runtime.Safe(Global.document);
   PieChart=Runtime.Safe(visualization.PieChart);
   Table=Runtime.Safe(visualization.Table);
+  Hello=Runtime.Safe(Sitelet.Hello);
+  Phoneword=Runtime.Safe(Sitelet.Phoneword);
   Strings=Runtime.Safe(WebSharper.Strings);
   String=Runtime.Safe(Global.String);
+  Scatter=Runtime.Safe(Sitelet.Scatter);
   Point=Runtime.Safe(Scatter.Point);
   Key=Runtime.Safe(Next.Key);
   Model1=Runtime.Safe(Next.Model1);
@@ -747,10 +1053,16 @@
   PointModel=Runtime.Safe(Scatter.PointModel);
   setInterval=Runtime.Safe(Global.setInterval);
   Math=Runtime.Safe(Global.Math);
-  return Operators1=Runtime.Safe(WebSharper.Operators);
+  Operators1=Runtime.Safe(WebSharper.Operators);
+  jQuery=Runtime.Safe(Global.jQuery);
+  return clearInterval=Runtime.Safe(Global.clearInterval);
  });
  Runtime.OnLoad(function()
  {
+  Slider1.settingsVar();
+  Slider1.fadeOutTrans();
+  Slider1.fadeInTrans();
+  Slider1.fade();
   Scatter.w();
   Scatter.range();
   Scatter.points();

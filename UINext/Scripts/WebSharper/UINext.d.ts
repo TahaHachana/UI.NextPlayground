@@ -15,6 +15,37 @@ declare module Sitelet {
             (): __ABBREV.__Html.Element;
         };
     }
+    module Slider {
+        interface Direction {
+        }
+        interface Settings {
+            Imgs: any;
+            Hover: boolean;
+            Direction: __ABBREV.__Slider.Direction;
+        }
+        var render : {
+            (settings: any): __ABBREV.__Next.Doc;
+        };
+        var main : {
+            (): void;
+        };
+        var fade : {
+            (): {
+                (x: number): {
+                    (x: number): any;
+                };
+            };
+        };
+        var fadeInTrans : {
+            (): any;
+        };
+        var fadeOutTrans : {
+            (): any;
+        };
+        var settingsVar : {
+            (): __ABBREV.__Next.Var1<any>;
+        };
+    }
     module GoogleDashboard {
         module Gender {
             var Show : {
@@ -176,8 +207,9 @@ declare module __ABBREV {
     
     export import __List = IntelliFactory.WebSharper.List;
     export import __Html = IntelliFactory.WebSharper.Html;
-    export import __GoogleDashboard = Sitelet.GoogleDashboard;
+    export import __Slider = Sitelet.Slider;
     export import __Next = IntelliFactory.WebSharper.UI.Next;
+    export import __GoogleDashboard = Sitelet.GoogleDashboard;
     export import __Bar = Sitelet.Bar;
     export import __D3 = IntelliFactory.WebSharper.D3;
     export import __WebSharper = IntelliFactory.WebSharper;
