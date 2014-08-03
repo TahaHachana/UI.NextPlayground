@@ -1,13 +1,13 @@
 (function()
 {
- var Global=this,Runtime=this.IntelliFactory.Runtime,WebSharper,Arrays,Sitelet,Bar,d3,IntrinsicFunctionProxy,UI,Next,Var1,Order,Var,View1,Doc,Html,List,Attr,T,Number,Trans,SvgElements,View,Seq,An,Interpolation,Easing,JQueryUI,SliderConfiguration,Slider,GoogleDashboard,Html1,Operators,Default,Slider1,Client,Gender,Unchecked,google,visualization,DataTable,document,PieChart,Table,Hello,Phoneword,Strings,String,Scatter,Point,Key,Model1,Model,Collections,ResizeArray,ResizeArrayProxy,PointModel,setInterval,Math,Operators1,jQuery,clearInterval;
+ var Global=this,Runtime=this.IntelliFactory.Runtime,WebSharper,Arrays,Sitelet,Bar,UI,Next,Var1,d3,IntrinsicFunctionProxy,Doc,View1,Html,List,Attr,T,Order,Number,Trans,SvgElements,View,Var,An,Interpolation,Easing,JQueryUI,SliderConfiguration,Slider,GoogleDashboard,Html1,Operators,Default,Hello,Scatter,Phoneword,Slider1,Client,Gender,Unchecked,google,visualization,DataTable,Seq,document,PieChart,Table,Strings,String,Point,Key,Model1,Model,Collections,ResizeArray,ResizeArrayProxy,PointModel,setInterval,Math,Operators1,jQuery,clearInterval;
  Runtime.Define(Global,{
   Sitelet:{
    Bar:{
     Order:Runtime.Class({},{
      Show:function(order)
      {
-      return order.$==2?"Asc":order.$==1?"Desc":"None";
+      return order.$==1?"Desc":"Asc";
      }
     }),
     data:Runtime.Field(function()
@@ -24,6 +24,10 @@
       };
      },Bar.dataset());
     }),
+    dataVar:Runtime.Field(function()
+    {
+     return Var1.Create(Bar.data());
+    }),
     dataset:Runtime.Field(function()
     {
      return[5,10,13,19,21,25,22,18,15,13,11,12,15,20,18,17,16,18,23,25];
@@ -34,127 +38,35 @@
     }),
     main:function()
     {
-     var xScale,yScale,svg,oldOrder,order,arg00,arg10,bars;
+     var xScale,yScale,svg;
      xScale=d3.scale.ordinal().domain(d3.range(IntrinsicFunctionProxy.GetLength(Bar.dataset()))).rangeRoundBands([0,Bar.w()],0.5);
      yScale=d3.scale.linear().domain([0,d3.max(Bar.dataset())]).range([0,Bar.h()]);
      svg=d3.select("#bar-chart").append("svg").attr("width",Bar.w()).attr("height",Bar.h());
      svg.append("g").attr("id","bar-svg");
-     oldOrder=Var1.Create(Runtime.New(Order,{
-      $:0
-     }));
-     order=Var1.Create(Runtime.New(Order,{
-      $:0
-     }));
-     arg00=function(order1)
+     Doc.RunById("bar-svg",Doc.EmbedView(View1.Map(function(order)
      {
-      var _order_;
-      if(order1.$==2)
-       {
-        Var.Set(oldOrder,Runtime.New(Order,{
-         $:2
-        }));
-        return Arrays.mapi(function(idx)
-        {
-         return function(d)
-         {
-          return{
-           X:d.X,
-           Index:idx,
-           OldIndex:d.Index
-          };
-         };
-        },Arrays.sortBy(function(y)
-        {
-         return y.X;
-        },Bar.data()));
-       }
-      else
-       {
-        if(order1.$==1)
-         {
-          Var.Set(oldOrder,Runtime.New(Order,{
-           $:1
-          }));
-          return Arrays.mapi(function(idx)
-          {
-           return function(d)
-           {
-            return{
-             X:d.X,
-             Index:idx,
-             OldIndex:d.Index
-            };
-           };
-          },Arrays.sortBy(function(y)
-          {
-           return y.X;
-          },Bar.data()).slice().reverse());
-         }
-        else
-         {
-          _order_=Var1.Get(oldOrder);
-          Var.Set(oldOrder,Runtime.New(Order,{
-           $:0
-          }));
-          return _order_.$==2?Arrays.mapi(function(idx)
-          {
-           return function(d)
-           {
-            var inputRecord;
-            inputRecord=(Bar.data())[idx];
-            return{
-             X:inputRecord.X,
-             Index:inputRecord.Index,
-             OldIndex:d.Index
-            };
-           };
-          },Arrays.sortBy(function(y)
-          {
-           return y.X;
-          },Bar.data())):_order_.$==1?Arrays.mapi(function(idx)
-          {
-           return function(d)
-           {
-            var inputRecord;
-            inputRecord=(Bar.data())[idx];
-            return{
-             X:inputRecord.X,
-             Index:inputRecord.Index,
-             OldIndex:d.Index
-            };
-           };
-          },Arrays.sortBy(function(y)
-          {
-           return y.X;
-          },Bar.data()).slice().reverse()):Bar.data();
-         }
-       }
-     };
-     arg10=order.get_View();
-     bars=View1.Map(arg00,arg10);
-     Doc.RunById("bar-svg",Doc.EmbedView(View1.Map(function(datums)
-     {
-      return Doc.Concat(Arrays.map(function(y)
-      {
-       return Bar.render(xScale,yScale,y);
-      },datums));
-     },bars)));
+      return Bar.showDatums(xScale,yScale,order);
+     },View1.FromVar(Bar.order()))));
      return Doc.RunById("bar",Html.Div(List.ofArray([Attr.Style("margin-bottom","10px")]),List.ofArray([Doc.TextNode("Order: "),Doc.Select(Runtime.New(T,{
       $:0
-     }),function(arg001)
+     }),function(arg00)
      {
-      return Order.Show(arg001);
+      return Order.Show(arg00);
      },List.ofArray([Runtime.New(Order,{
       $:0
      }),Runtime.New(Order,{
-      $:2
-     }),Runtime.New(Order,{
       $:1
-     })]),order)])));
+     })]),Bar.order())])));
     },
+    order:Runtime.Field(function()
+    {
+     return Var1.Create(Runtime.New(Order,{
+      $:0
+     }));
+    }),
     render:function(xScale,yScale,datum)
     {
-     var index,oldIndex,x,x1,trans,arg30;
+     var index,oldIndex,x,x1,trans,arg30,arg301;
      index=datum.Index;
      oldIndex=xScale(datum.OldIndex);
      x=Number(datum.X);
@@ -167,46 +79,65 @@
      {
       return Global.String(value);
      };
+     arg301=function(value)
+     {
+      return Global.String(value);
+     };
      return Doc.Concat(List.ofArray([SvgElements.Rect(List.ofArray([Attr.Create("y",Global.String(Bar.h()-yScale(x))),Attr.Create("width",Global.String(xScale.rangeBand())),Attr.Create("height",Global.String(yScale(x))),Attr.Create("fill","steelblue"),Attr.Animated("x",trans,View1.Map(function(x2)
      {
       return x2;
      },View.Const(xScale(index))),arg30)]),Runtime.New(T,{
       $:0
-     })),SvgElements.Text(Seq.toList(Seq.delay(function()
+     })),SvgElements.Text(List.ofArray([Attr.Create("text-anchor","middle"),Attr.Create("font-family","sans-serif"),Attr.Create("font-size","11px"),Attr.Create("fill","white"),Attr.Animated("x",trans,View1.Map(function(x2)
      {
-      return Seq.append([Attr.Create("text-anchor","middle")],Seq.delay(function()
+      return x2;
+     },View.Const(xScale(index)+7)),arg301),Attr.Create("y",Global.String(Bar.h()-yScale(x)+15))]),List.ofArray([Doc.TextNode(Global.String(x))]))]));
+    },
+    showDatums:function(xScale,yScale,order)
+    {
+     var _,data,data1;
+     if(order.$==1)
       {
-       return Seq.append([Attr.Create("font-family","sans-serif")],Seq.delay(function()
+       data=Arrays.mapi(function(idx)
        {
-        return Seq.append([Attr.Create("font-size","11px")],Seq.delay(function()
+        return function(d)
         {
-         return Seq.append([Attr.Create("fill","white")],Seq.delay(function()
-         {
-          var _,arg301;
-          if(datum.OldIndex===index)
-           {
-            _=[Attr.Create("x",Global.String(xScale(index)+7))];
-           }
-          else
-           {
-            arg301=function(value)
-            {
-             return Global.String(value);
-            };
-            _=[Attr.Animated("x",trans,View1.Map(function(x2)
-            {
-             return x2;
-            },View.Const(xScale(index)+7)),arg301)];
-           }
-          return Seq.append(_,Seq.delay(function()
-          {
-           return[Attr.Create("y",Global.String(Bar.h()-yScale(x)+15))];
-          }));
-         }));
-        }));
-       }));
-      }));
-     })),List.ofArray([Doc.TextNode(Global.String(x))]))]));
+         return{
+          X:d.X,
+          Index:idx,
+          OldIndex:d.Index
+         };
+        };
+       },Arrays.sortBy(function(y)
+       {
+        return y.X;
+       },Var1.Get(Bar.dataVar())).slice().reverse());
+       Var.Set(Bar.dataVar(),data);
+       _=data;
+      }
+     else
+      {
+       data1=Arrays.mapi(function(idx)
+       {
+        return function(d)
+        {
+         return{
+          X:d.X,
+          Index:idx,
+          OldIndex:d.Index
+         };
+        };
+       },Arrays.sortBy(function(y)
+       {
+        return y.X;
+       },Var1.Get(Bar.dataVar())));
+       Var.Set(Bar.dataVar(),data1);
+       _=data1;
+      }
+     return Doc.Concat(Arrays.map(function(y)
+     {
+      return Bar.render(xScale,yScale,y);
+     },_));
     },
     simpleAnim:function(x,y)
     {
@@ -247,9 +178,22 @@
        return Var.Set(arg00,arg10);
       }))([values[0],values[1]]);
      });
-     x=Operators.add(Default.Div(List.ofArray([Default.Attr().Class("container")])),List.ofArray([Operators.add(Default.Div(List.ofArray([Default.Attr().Class("example")])),List.ofArray([Default.H1(List.ofArray([Default.Text("Slider"),Default.Attr().Class("page-header")])),Operators.add(Default.Div(List.ofArray([Default.Attr().NewAttr("id","slider-container")])),List.ofArray([Default.Div(List.ofArray([Default.Attr().NewAttr("id","slider")]))]))]))]));
+     x=Operators.add(Default.Div(List.ofArray([Default.Attr().Class("container")])),List.ofArray([Operators.add(Default.Div(List.ofArray([Default.Attr().Class("example")])),List.ofArray([Default.H1(List.ofArray([Default.Text("Hello"),Default.Attr().Class("page-header")])),Default.Div(List.ofArray([Default.Attr().NewAttr("id","hello")]))])),Default.Hr(Runtime.New(T,{
+      $:0
+     })),Operators.add(Default.Div(List.ofArray([Default.Attr().Class("example")])),List.ofArray([Default.H1(List.ofArray([Default.Text("Dynamic Scatterplot"),Default.Attr().Class("page-header")])),Default.Div(List.ofArray([Default.Attr().NewAttr("id","scatter")]))])),Default.Hr(Runtime.New(T,{
+      $:0
+     })),Operators.add(Default.Div(List.ofArray([Default.Attr().Class("example")])),List.ofArray([Default.H1(List.ofArray([Default.Text("Phoneword"),Default.Attr().Class("page-header")])),Default.Div(List.ofArray([Default.Attr().NewAttr("id","phoneword")]))])),Default.Hr(Runtime.New(T,{
+      $:0
+     })),Operators.add(Default.Div(List.ofArray([Default.Attr().Class("example")])),List.ofArray([Default.H1(List.ofArray([Default.Text("Column Chart"),Default.Attr().Class("page-header")])),Default.Div(List.ofArray([Default.Attr().NewAttr("id","bar")])),Default.Div(List.ofArray([Default.Attr().NewAttr("id","bar-chart")]))])),Default.Hr(Runtime.New(T,{
+      $:0
+     })),Operators.add(Default.Div(List.ofArray([Default.Attr().Class("example")])),List.ofArray([Default.H1(List.ofArray([Default.Text("Google Dashboard"),Default.Attr().Class("page-header")])),Operators.add(Default.Div(List.ofArray([Default.Attr().Class("row"),Default.Attr().NewAttr("style","margin-bottom:50px;")])),List.ofArray([Operators.add(Default.Div(List.ofArray([Default.Attr().Class("col-md-6")])),List.ofArray([Default.Div(List.ofArray([Default.Text("Age Selection")])),Default.Div(List.ofArray([Default.Attr().NewAttr("id","min-max"),Default.Attr().NewAttr("style","margin-bottom:5px;")])),Default.Div(List.ofArray([slider]))])),Operators.add(Default.Div(List.ofArray([Default.Attr().Class("col-md-6")])),List.ofArray([Default.Div(List.ofArray([Default.Attr().NewAttr("id","google-dash")]))]))])),Operators.add(Default.Div(List.ofArray([Default.Attr().Class("row")])),List.ofArray([Operators.add(Default.Div(List.ofArray([Default.Attr().Class("col-md-6")])),List.ofArray([Default.Div(List.ofArray([Default.Attr().NewAttr("style","height: 400px;"),Default.Attr().NewAttr("id","google-pie")]))])),Operators.add(Default.Div(List.ofArray([Default.Attr().Class("col-md-6")])),List.ofArray([Default.Div(List.ofArray([Default.Attr().NewAttr("style","height: 400px;"),Default.Attr().NewAttr("id","google-table")]))]))])),Default.Div(List.ofArray([Default.Attr().NewAttr("id","google")]))])),Operators.add(Default.Div(List.ofArray([Default.Attr().Class("example")])),List.ofArray([Default.H1(List.ofArray([Default.Text("Image Slider"),Default.Attr().Class("page-header")])),Operators.add(Default.Div(List.ofArray([Default.Attr().NewAttr("id","slider-container")])),List.ofArray([Default.Div(List.ofArray([Default.Attr().NewAttr("id","slider")]))]))]))]));
      Operators.OnAfterRender(function()
      {
+      Doc.RunById("hello",Hello.main());
+      Scatter.main();
+      Doc.RunById("phoneword",Phoneword.main());
+      Bar.main();
+      GoogleDashboard.main();
       return Slider1.main();
      },x);
      return x;
@@ -676,321 +620,168 @@
     })
    },
    Slider:{
+    animStyle:function(trans,constView)
+    {
+     var arg30;
+     arg30=function(value)
+     {
+      return Global.String(value);
+     };
+     return Attr.AnimatedStyle("opacity",trans,View.Const(constView),arg30);
+    },
     fade:Runtime.Field(function()
     {
-     var arg00,arg10;
-     arg00=Interpolation.get_Double();
-     arg10=Easing.get_CubicInOut();
+     var _arg00_433_3,_arg10_433_1;
+     _arg00_433_3=Interpolation.get_Double();
+     _arg10_433_1=Easing.get_CubicInOut();
      return function(arg30)
      {
       return function(arg40)
       {
-       return An.Simple(arg00,arg10,1000,arg30,arg40);
+       return An.Simple(_arg00_433_3,_arg10_433_1,1000,arg30,arg40);
       };
      };
     }),
     fadeInTrans:Runtime.Field(function()
     {
-     return Trans.Enter(function()
-     {
-      return((Slider1.fade())(0))(1);
-     },Trans.Create(Slider1.fade()));
+     return Slider1.fadeTrans(0,1);
     }),
     fadeOutTrans:Runtime.Field(function()
     {
+     return Slider1.fadeTrans(1,0);
+    }),
+    fadeTrans:function(startValue,endValue)
+    {
      return Trans.Enter(function()
      {
-      return((Slider1.fade())(1))(0);
+      return((Slider1.fade())(startValue))(endValue);
      },Trans.Create(Slider1.fade()));
-    }),
+    },
+    img:function(attrs)
+    {
+     return Doc.Element("img",attrs,Runtime.New(T,{
+      $:0
+     }));
+    },
+    incrementImgs:function(settingsVal)
+    {
+     var arg00,matchValue;
+     arg00=Slider1.settingsVar();
+     matchValue=settingsVal.Imgs;
+     return Var.Set(arg00,{
+      Imgs:matchValue[0]===6?matchValue[1]===7?[7,1]:[matchValue[0]+1,matchValue[1]+1]:matchValue[0]===7?matchValue[1]===1?[1,2]:[matchValue[0]+1,matchValue[1]+1]:[matchValue[0]+1,matchValue[1]+1],
+      Direction:settingsVal.Direction
+     });
+    },
+    link:function(text,id,handler)
+    {
+     return Doc.Link(text,List.ofArray([Attr.Create("id",id)]),handler);
+    },
     main:function()
     {
-     var x,timer;
+     var timer;
      Doc.RunById("slider",Doc.EmbedView(View1.Map(function(settings)
      {
       return Slider1.render(settings);
-     },Slider1.settingsVar().get_View())));
-     x=setInterval(function()
-     {
-      var settingsVal,matchValue,matchValue1,x1,y,x2,y1,x3,y2;
-      settingsVal=Var1.Get(Slider1.settingsVar());
-      matchValue=settingsVal.Hover;
-      if(matchValue)
-       {
-        return null;
-       }
-      else
-       {
-        matchValue1=settingsVal.Imgs;
-        if(matchValue1[0]===6)
-         {
-          if(matchValue1[1]===7)
-           {
-            return Var.Set(Slider1.settingsVar(),{
-             Imgs:[7,1],
-             Hover:settingsVal.Hover,
-             Direction:settingsVal.Direction
-            });
-           }
-          else
-           {
-            x1=matchValue1[0];
-            y=matchValue1[1];
-            return Var.Set(Slider1.settingsVar(),{
-             Imgs:[x1+1,y+1],
-             Hover:settingsVal.Hover,
-             Direction:settingsVal.Direction
-            });
-           }
-         }
-        else
-         {
-          if(matchValue1[0]===7)
-           {
-            if(matchValue1[1]===1)
-             {
-              return Var.Set(Slider1.settingsVar(),{
-               Imgs:[1,2],
-               Hover:settingsVal.Hover,
-               Direction:settingsVal.Direction
-              });
-             }
-            else
-             {
-              x2=matchValue1[0];
-              y1=matchValue1[1];
-              return Var.Set(Slider1.settingsVar(),{
-               Imgs:[x2+1,y1+1],
-               Hover:settingsVal.Hover,
-               Direction:settingsVal.Direction
-              });
-             }
-           }
-          else
-           {
-            x3=matchValue1[0];
-            y2=matchValue1[1];
-            return Var.Set(Slider1.settingsVar(),{
-             Imgs:[x3+1,y2+1],
-             Hover:settingsVal.Hover,
-             Direction:settingsVal.Direction
-            });
-           }
-         }
-       }
-     },2000);
-     timer=Var1.Create(x);
+     },View1.FromVar(Slider1.settingsVar()))));
+     timer=Var1.Create(Slider1.scrollTimer());
      return jQuery("#slider, #prev-slide, #next-slide").hover(function()
      {
       return clearInterval(Var1.Get(timer));
      },function()
      {
-      return Var.Set(timer,setInterval(function()
-      {
-       var settingsVal,matchValue,matchValue1,arg00,Direction,x1,y,arg001,Direction1,arg002,Direction2,x2,y1,arg003,Direction3,x3,y2,arg004,Direction4;
-       settingsVal=Var1.Get(Slider1.settingsVar());
-       matchValue=settingsVal.Hover;
-       if(matchValue)
-        {
-         return null;
-        }
-       else
-        {
-         matchValue1=settingsVal.Imgs;
-         if(matchValue1[0]===6)
-          {
-           if(matchValue1[1]===7)
-            {
-             arg00=Slider1.settingsVar();
-             Direction={
-              $:1
-             };
-             return Var.Set(arg00,{
-              Imgs:[7,1],
-              Hover:settingsVal.Hover,
-              Direction:Direction
-             });
-            }
-           else
-            {
-             x1=matchValue1[0];
-             y=matchValue1[1];
-             arg001=Slider1.settingsVar();
-             Direction1={
-              $:1
-             };
-             return Var.Set(arg001,{
-              Imgs:[x1+1,y+1],
-              Hover:settingsVal.Hover,
-              Direction:Direction1
-             });
-            }
-          }
-         else
-          {
-           if(matchValue1[0]===7)
-            {
-             if(matchValue1[1]===1)
-              {
-               arg002=Slider1.settingsVar();
-               Direction2={
-                $:1
-               };
-               return Var.Set(arg002,{
-                Imgs:[1,2],
-                Hover:settingsVal.Hover,
-                Direction:Direction2
-               });
-              }
-             else
-              {
-               x2=matchValue1[0];
-               y1=matchValue1[1];
-               arg003=Slider1.settingsVar();
-               Direction3={
-                $:1
-               };
-               return Var.Set(arg003,{
-                Imgs:[x2+1,y1+1],
-                Hover:settingsVal.Hover,
-                Direction:Direction3
-               });
-              }
-            }
-           else
-            {
-             x3=matchValue1[0];
-             y2=matchValue1[1];
-             arg004=Slider1.settingsVar();
-             Direction4={
-              $:1
-             };
-             return Var.Set(arg004,{
-              Imgs:[x3+1,y2+1],
-              Hover:settingsVal.Hover,
-              Direction:Direction4
-             });
-            }
-          }
-        }
-      },2000));
+      var settingsVal;
+      settingsVal=Var1.Get(Slider1.settingsVar());
+      if(settingsVal.Direction.$==0)
+       {
+        Slider1.setDirection(settingsVal,{
+         $:1
+        });
+       }
+      return Var.Set(timer,Slider1.scrollTimer());
      });
+    },
+    opacityIn:function()
+    {
+     return Slider1.animStyle(Slider1.fadeInTrans(),1);
+    },
+    opacityOut:function()
+    {
+     return Slider1.animStyle(Slider1.fadeOutTrans(),0);
     },
     render:function(settings)
     {
-     return Doc.Concat(Seq.toList(Seq.delay(function()
+     var imgs;
+     imgs=settings.Imgs;
+     return Doc.Concat(List.ofArray([Slider1.img(Seq.toList(Seq.delay(function()
      {
-      var matchValue,_,arg30,arg301,arg302,arg303;
-      matchValue=settings.Direction;
+      return Seq.append([Slider1.src(imgs[0])],Seq.delay(function()
+      {
+       return settings.Direction.$==0?[Slider1.opacityIn()]:[Slider1.opacityOut()];
+      }));
+     }))),Slider1.img(Seq.toList(Seq.delay(function()
+     {
+      return Seq.append([Slider1.src(imgs[1])],Seq.delay(function()
+      {
+       return settings.Direction.$==0?[Slider1.opacityOut()]:[Slider1.opacityIn()];
+      }));
+     }))),Slider1.link("Prev","prev-slide",function()
+     {
+      var settingsVal,matchValue,arg00,inputRecord,matchValue1;
+      settingsVal=Var1.Get(Slider1.settingsVar());
+      matchValue=settingsVal.Direction;
       if(matchValue.$==0)
        {
-        arg30=function(value)
-        {
-         return Global.String(value);
-        };
-        arg301=function(value)
-        {
-         return Global.String(value);
-        };
-        _=[Doc.Concat(List.ofArray([Doc.Element("img",List.ofArray([Attr.Create("src","http://placekitten.com/200/200?image="+Global.String(settings.Imgs[0])),Attr.AnimatedStyle("opacity",Slider1.fadeInTrans(),View.Const(1),arg30)]),Runtime.New(T,{
-         $:0
-        })),Doc.Element("img",List.ofArray([Attr.Create("src","http://placekitten.com/200/200?image="+Global.String(settings.Imgs[1])),Attr.AnimatedStyle("opacity",Slider1.fadeOutTrans(),View.Const(0),arg301)]),Runtime.New(T,{
-         $:0
-        }))]))];
+        arg00=Slider1.settingsVar();
+        inputRecord=Slider1.settingsVar().get_Value();
+        matchValue1=Slider1.settingsVar().get_Value().Imgs;
+        return Var.Set(arg00,{
+         Imgs:matchValue1[0]===1?matchValue1[1]===2?[7,1]:[matchValue1[0]-1,matchValue1[1]-1]:matchValue1[0]===7?matchValue1[1]===1?[6,7]:[matchValue1[0]-1,matchValue1[1]-1]:[matchValue1[0]-1,matchValue1[1]-1],
+         Direction:inputRecord.Direction
+        });
        }
       else
        {
-        arg302=function(value)
-        {
-         return Global.String(value);
-        };
-        arg303=function(value)
-        {
-         return Global.String(value);
-        };
-        _=[Doc.Concat(List.ofArray([Doc.Element("img",List.ofArray([Attr.Create("src","http://placekitten.com/200/200?image="+Global.String(settings.Imgs[0])),Attr.AnimatedStyle("opacity",Slider1.fadeOutTrans(),View.Const(0),arg302)]),Runtime.New(T,{
+        return Slider1.setDirection(settingsVal,{
          $:0
-        })),Doc.Element("img",List.ofArray([Attr.Create("src","http://placekitten.com/200/200?image="+Global.String(settings.Imgs[1])),Attr.AnimatedStyle("opacity",Slider1.fadeInTrans(),View.Const(1),arg303)]),Runtime.New(T,{
-         $:0
-        }))]))];
+        });
        }
-      return Seq.append(_,Seq.delay(function()
-      {
-       var arg10;
-       arg10=List.ofArray([Attr.Create("id","prev-slide")]);
-       return Seq.append([Doc.Link("Prev",arg10,function()
-       {
-        var matchValue1,arg00,inputRecord,matchValue2,arg001,inputRecord1;
-        matchValue1=Slider1.settingsVar().get_Value().Direction;
-        if(matchValue1.$==0)
-         {
-          arg00=Slider1.settingsVar();
-          inputRecord=Slider1.settingsVar().get_Value();
-          matchValue2=Slider1.settingsVar().get_Value().Imgs;
-          return Var.Set(arg00,{
-           Imgs:matchValue2[0]===1?matchValue2[1]===2?[7,1]:[matchValue2[0]-1,matchValue2[1]-1]:matchValue2[0]===7?matchValue2[1]===1?[6,7]:[matchValue2[0]-1,matchValue2[1]-1]:[matchValue2[0]-1,matchValue2[1]-1],
-           Hover:inputRecord.Hover,
-           Direction:inputRecord.Direction
-          });
-         }
-        else
-         {
-          arg001=Slider1.settingsVar();
-          inputRecord1=Slider1.settingsVar().get_Value();
-          return Var.Set(arg001,{
-           Imgs:inputRecord1.Imgs,
-           Hover:inputRecord1.Hover,
-           Direction:{
-            $:0
-           }
-          });
-         }
-       })],Seq.delay(function()
-       {
-        var arg101;
-        arg101=List.ofArray([Attr.Create("id","next-slide")]);
-        return[Doc.Link("Next",arg101,function()
-        {
-         var matchValue1,arg00,inputRecord,matchValue2,arg001,inputRecord1;
-         matchValue1=Slider1.settingsVar().get_Value().Direction;
-         if(matchValue1.$==1)
-          {
-           arg00=Slider1.settingsVar();
-           inputRecord=Slider1.settingsVar().get_Value();
-           matchValue2=Slider1.settingsVar().get_Value().Imgs;
-           return Var.Set(arg00,{
-            Imgs:matchValue2[0]===6?matchValue2[1]===7?[7,1]:[matchValue2[0]+1,matchValue2[1]+1]:matchValue2[0]===7?matchValue2[1]===1?[1,2]:[matchValue2[0]+1,matchValue2[1]+1]:[matchValue2[0]+1,matchValue2[1]+1],
-            Hover:inputRecord.Hover,
-            Direction:inputRecord.Direction
-           });
-          }
-         else
-          {
-           arg001=Slider1.settingsVar();
-           inputRecord1=Slider1.settingsVar().get_Value();
-           return Var.Set(arg001,{
-            Imgs:inputRecord1.Imgs,
-            Hover:inputRecord1.Hover,
-            Direction:{
-             $:1
-            }
-           });
-          }
-        })];
-       }));
-      }));
-     })));
+     }),Slider1.link("Next","next-slide",function()
+     {
+      var settingsVal;
+      settingsVal=Var1.Get(Slider1.settingsVar());
+      return settingsVal.Direction.$==1?Slider1.incrementImgs(settingsVal):Slider1.setDirection(settingsVal,{
+       $:1
+      });
+     })]));
+    },
+    scrollTimer:function()
+    {
+     return setInterval(function()
+     {
+      return Slider1.incrementImgs(Var1.Get(Slider1.settingsVar()));
+     },2000);
+    },
+    setDirection:function(settingsVal,direction)
+    {
+     return Var.Set(Slider1.settingsVar(),{
+      Imgs:settingsVal.Imgs,
+      Direction:direction
+     });
     },
     settingsVar:Runtime.Field(function()
     {
      return Var1.Create({
       Imgs:[1,2],
-      Hover:false,
       Direction:{
        $:1
       }
      });
-    })
+    }),
+    src:function(id)
+    {
+     return Attr.Create("src","http://placekitten.com/200/200?image="+Global.String(id));
+    }
    }
   }
  });
@@ -1000,24 +791,23 @@
   Arrays=Runtime.Safe(WebSharper.Arrays);
   Sitelet=Runtime.Safe(Global.Sitelet);
   Bar=Runtime.Safe(Sitelet.Bar);
-  d3=Runtime.Safe(Global.d3);
-  IntrinsicFunctionProxy=Runtime.Safe(WebSharper.IntrinsicFunctionProxy);
   UI=Runtime.Safe(WebSharper.UI);
   Next=Runtime.Safe(UI.Next);
   Var1=Runtime.Safe(Next.Var1);
-  Order=Runtime.Safe(Bar.Order);
-  Var=Runtime.Safe(Next.Var);
-  View1=Runtime.Safe(Next.View1);
+  d3=Runtime.Safe(Global.d3);
+  IntrinsicFunctionProxy=Runtime.Safe(WebSharper.IntrinsicFunctionProxy);
   Doc=Runtime.Safe(Next.Doc);
+  View1=Runtime.Safe(Next.View1);
   Html=Runtime.Safe(Next.Html);
   List=Runtime.Safe(WebSharper.List);
   Attr=Runtime.Safe(Next.Attr);
   T=Runtime.Safe(List.T);
+  Order=Runtime.Safe(Bar.Order);
   Number=Runtime.Safe(Global.Number);
   Trans=Runtime.Safe(Next.Trans);
   SvgElements=Runtime.Safe(Html.SvgElements);
   View=Runtime.Safe(Next.View);
-  Seq=Runtime.Safe(WebSharper.Seq);
+  Var=Runtime.Safe(Next.Var);
   An=Runtime.Safe(Next.An);
   Interpolation=Runtime.Safe(Next.Interpolation);
   Easing=Runtime.Safe(Next.Easing);
@@ -1028,6 +818,9 @@
   Html1=Runtime.Safe(WebSharper.Html);
   Operators=Runtime.Safe(Html1.Operators);
   Default=Runtime.Safe(Html1.Default);
+  Hello=Runtime.Safe(Sitelet.Hello);
+  Scatter=Runtime.Safe(Sitelet.Scatter);
+  Phoneword=Runtime.Safe(Sitelet.Phoneword);
   Slider1=Runtime.Safe(Sitelet.Slider);
   Client=Runtime.Safe(Sitelet.Client);
   Gender=Runtime.Safe(GoogleDashboard.Gender);
@@ -1035,14 +828,12 @@
   google=Runtime.Safe(Global.google);
   visualization=Runtime.Safe(google.visualization);
   DataTable=Runtime.Safe(visualization.DataTable);
+  Seq=Runtime.Safe(WebSharper.Seq);
   document=Runtime.Safe(Global.document);
   PieChart=Runtime.Safe(visualization.PieChart);
   Table=Runtime.Safe(visualization.Table);
-  Hello=Runtime.Safe(Sitelet.Hello);
-  Phoneword=Runtime.Safe(Sitelet.Phoneword);
   Strings=Runtime.Safe(WebSharper.Strings);
   String=Runtime.Safe(Global.String);
-  Scatter=Runtime.Safe(Sitelet.Scatter);
   Point=Runtime.Safe(Scatter.Point);
   Key=Runtime.Safe(Next.Key);
   Model1=Runtime.Safe(Next.Model1);
@@ -1079,8 +870,10 @@
   GoogleDashboard.age();
   Bar.w();
   Bar.simpleTrans();
+  Bar.order();
   Bar.h();
   Bar.dataset();
+  Bar.dataVar();
   Bar.data();
   return;
  });

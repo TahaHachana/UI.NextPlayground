@@ -20,11 +20,42 @@ declare module Sitelet {
         }
         interface Settings {
             Imgs: any;
-            Hover: boolean;
             Direction: __ABBREV.__Slider.Direction;
         }
+        var fadeTrans : {
+            (startValue: number, endValue: number): any;
+        };
+        var animStyle : {
+            (trans: any, constView: number): __ABBREV.__Next.Attr;
+        };
+        var opacityIn : {
+            (): __ABBREV.__Next.Attr;
+        };
+        var opacityOut : {
+            (): __ABBREV.__Next.Attr;
+        };
+        var src : {
+            (id: number): __ABBREV.__Next.Attr;
+        };
+        var img : {
+            (attrs: __ABBREV.__WebSharper.seq<__ABBREV.__Next.Attr>): __ABBREV.__Next.Doc;
+        };
+        var link : {
+            (text: string, id: string, handler: {
+                (): void;
+            }): __ABBREV.__Next.Doc;
+        };
+        var setDirection : {
+            (settingsVal: any, direction: __ABBREV.__Slider.Direction): void;
+        };
+        var incrementImgs : {
+            (settingsVal: any): void;
+        };
         var render : {
             (settings: any): __ABBREV.__Next.Doc;
+        };
+        var scrollTimer : {
+            (): any;
         };
         var main : {
             (): void;
@@ -98,6 +129,9 @@ declare module Sitelet {
         var render : {
             (xScale: __ABBREV.__D3.OrdinalScale<number>, yScale: __ABBREV.__D3.QuantitativeScale, datum: any): __ABBREV.__Next.Doc;
         };
+        var showDatums : {
+            (xScale: __ABBREV.__D3.OrdinalScale<number>, yScale: __ABBREV.__D3.QuantitativeScale, order: __ABBREV.__Bar.Order): __ABBREV.__Next.Doc;
+        };
         var main : {
             (): void;
         };
@@ -115,6 +149,12 @@ declare module Sitelet {
         };
         var simpleTrans : {
             (): any;
+        };
+        var dataVar : {
+            (): __ABBREV.__Next.Var1<any[]>;
+        };
+        var order : {
+            (): __ABBREV.__Next.Var1<__ABBREV.__Bar.Order>;
         };
     }
     module Phoneword {
@@ -209,9 +249,9 @@ declare module __ABBREV {
     export import __Html = IntelliFactory.WebSharper.Html;
     export import __Slider = Sitelet.Slider;
     export import __Next = IntelliFactory.WebSharper.UI.Next;
+    export import __WebSharper = IntelliFactory.WebSharper;
     export import __GoogleDashboard = Sitelet.GoogleDashboard;
     export import __Bar = Sitelet.Bar;
     export import __D3 = IntelliFactory.WebSharper.D3;
-    export import __WebSharper = IntelliFactory.WebSharper;
     export import __Scatter = Sitelet.Scatter;
 }

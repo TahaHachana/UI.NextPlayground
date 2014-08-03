@@ -246,26 +246,48 @@ module Bar =
                 Attr.Animated "x" trans (View.Map id <| View.Const(xScale.Apply(index))) string
             ] []
             SvgElements.Text [
-                yield Attr.Create "text-anchor" "middle"
-                yield Attr.Create "font-family" "sans-serif"
-                yield Attr.Create "font-size" "11px"
-                yield Attr.Create "fill" "white"
-                match (datum.OldIndex) = index with
-                | false -> yield Attr.Animated "x" trans (View.Map id <| View.Const(xScale.Apply(index) + 7.)) string
-                | true -> yield Attr.Create "x" <| string (xScale.Apply(index) + 7.)
-                yield Attr.Create "y" (string <| h - yScale.Apply(x) + 15.)
+                Attr.Create "text-anchor" "middle"
+                Attr.Create "font-family" "sans-serif"
+                Attr.Create "font-size" "11px"
+                Attr.Create "fill" "white"
+                Attr.Animated "x" trans (View.Map id <| View.Const(xScale.Apply(index) + 7.)) string                
+                Attr.Create "y" (string <| h - yScale.Apply(x) + 15.)
             ] [Doc.TextNode (string x)]
         ]
 
-    type Order = None | Desc | Asc
+    type Order = Asc | Desc
 
     type Order with
 
         static member Show order =
             match order with
-            | None -> "None"
             | Asc -> "Asc"
             | Desc -> "Desc"
+
+    let dataVar = Var.Create data
+    let order = Var.Create Asc
+
+    let showDatums xScale yScale order =
+        match order with
+        | Asc ->
+            let dataVal = Var.Get dataVar
+            let data =
+                dataVal
+                |> Array.sortBy (fun y -> y.X)
+                |> Array.mapi (fun idx d -> {d with Index = idx; OldIndex = d.Index})
+            Var.Set dataVar data
+            data
+        | Desc ->
+            let dataVal = Var.Get dataVar
+            let data =
+                dataVal
+                |> Array.sortBy (fun y -> y.X)
+                |> Array.rev
+                |> Array.mapi (fun idx d -> {d with Index = idx; OldIndex = d.Index})
+            Var.Set dataVar data
+            data
+        |> Array.map (fun y -> render xScale yScale y)
+        |> Doc.Concat
 
     let main () =
 
@@ -288,48 +310,15 @@ module Bar =
         svg.Append("g")
             .Attr("id", "bar-svg")
         |> ignore                        
-
-        let oldOrder = Var.Create None
-        let order = Var.Create None
         
-        let bars = View.Map (fun order ->
-            match order with
-            | None ->
-                let order' = Var.Get oldOrder
-                Var.Set oldOrder None
-                match order' with
-                | None -> data
-                | Asc ->
-                    data
-                    |> Array.sortBy (fun y -> y.X)
-                    |> Array.mapi (fun idx d -> {data.[idx] with OldIndex = d.Index})
-                | Desc ->
-                    data
-                    |> Array.sortBy (fun y -> y.X)
-                    |> Array.rev
-                    |> Array.mapi (fun idx d -> {data.[idx] with OldIndex = d.Index})       
-            | Asc ->
-                Var.Set oldOrder Asc
-                data
-                |> Array.sortBy (fun y -> y.X)
-                |> Array.mapi (fun idx d -> {d with Index = idx; OldIndex = d.Index})
-            | Desc ->
-                Var.Set oldOrder Desc
-                data
-                |> Array.sortBy (fun y -> y.X)
-                |> Array.rev
-                |> Array.mapi (fun idx d -> {d with Index = idx; OldIndex = d.Index})) order.View
-        
-        let showDatums datums =
-            Doc.Concat (Array.map (fun y -> render xScale yScale y) datums)
-
-        View.Map showDatums bars
+        View.FromVar order
+        |> View.Map (showDatums xScale yScale)
         |> Doc.EmbedView
         |> Doc.RunById "bar-svg"
         
         Div [Attr.Style "margin-bottom" "10px"] [
             Doc.TextNode "Order: "
-            Doc.Select [] Order.Show [None; Asc; Desc] order
+            Doc.Select [] Order.Show [Asc; Desc] order
         ]
         |> Doc.RunById "bar"
 
@@ -441,190 +430,126 @@ module GoogleDashboard =
 [<JavaScript>]
 module Slider =
     
-//    let src = "http://placekitten.com/200/200?image=1"
-
     let fade = Anim.Simple Interpolation.Double Easing.CubicInOut 1000.
 
-    let fadeInTrans =
+    let fadeTrans startValue endValue =
         Trans.Create fade
-        |> Trans.Enter (fun i -> fade 0.0 1.0)
+        |> Trans.Enter (fun i -> fade startValue endValue)
+        
+    let fadeInTrans = fadeTrans 0. 1.
 
-    let fadeOutTrans =
-        Trans.Create fade
-        |> Trans.Enter (fun i -> fade 1.0 0.0)
+    let fadeOutTrans = fadeTrans 1. 0.
 
-//    let display = Anim.Simple Interpolation.Double Easing.CubicInOut 0.
+    let animStyle trans constView = Attr.AnimatedStyle "opacity" trans (View.Const constView) string
 
-//    let displayTrans =
-//        Trans.Create display
-//        |> Trans.Enter (fun i -> fade 0.0 1.0)
-
-
-//    let imgs = Var.Create (1, 2)
-//    
-//    let hover = Var.Create false
+    let opacityIn() = animStyle fadeInTrans 1.
+    let opacityOut() = animStyle fadeOutTrans 0.
 
     type Direction = Backward | Forward
-    // don't need hover
+
     type Settings =
         {
             Imgs : int * int
-            Hover : bool
             Direction : Direction
         }
 
-    let settingsVar = Var.Create {Imgs = 1, 2; Hover = false; Direction = Forward}
+    let settingsVar = Var.Create {Imgs = 1, 2; Direction = Forward}
     
-    let render settings =
-//        match settings.Hover with
-//            | false ->
-                Doc.Concat [
-                    match settings.Direction with
-                    | Forward ->
-                        yield Doc.Concat [
-                            Doc.Element
-                                "img"
-                                [
-                                    Attr.Create "src" <| "http://placekitten.com/200/200?image=" + string (fst settings.Imgs)
-                                    Attr.AnimatedStyle "opacity" fadeOutTrans (View.Const 0.) string
-                                ]
-                                []
-                            Doc.Element
-                                "img"
-                                [
-                                    Attr.Create "src" <| "http://placekitten.com/200/200?image=" + string (snd settings.Imgs)
-                                    Attr.AnimatedStyle "opacity" fadeInTrans (View.Const 1.) string
-                                ]
-                                []
-                        ]                           
-                    | Backward ->
-                        yield Doc.Concat [
-                            Doc.Element
-                                "img"
-                                [
-                                    Attr.Create "src" <| "http://placekitten.com/200/200?image=" + string (fst settings.Imgs)
-                                    Attr.AnimatedStyle "opacity" fadeInTrans (View.Const 1.) string
-                                ]
-                                []
-                            Doc.Element
-                                "img"
-                                [
-                                    Attr.Create "src" <| "http://placekitten.com/200/200?image=" + string (snd settings.Imgs)
-                                    Attr.AnimatedStyle "opacity" fadeOutTrans (View.Const 0.) string
-                                ]
-                                []
-                        ]                           
-                    yield Doc.Link
-                        "Prev"
-                        [Attr.Create "id" "prev-slide"]
-                        (fun () ->
-                            match settingsVar.Value.Direction with
-                            | Forward -> Var.Set settingsVar {settingsVar.Value with Direction = Backward}
-                            | Backward ->
-                                Var.Set
-                                    settingsVar 
-                                    {
-                                        settingsVar.Value with
-                                            Imgs =
-                                                match settingsVar.Value.Imgs with
-                                                | 7, 1 -> 6, 7
-                                                | 1, 2 -> 7, 1
-                                                | x, y -> x - 1, y - 1
-//                                        Direction = Backward
-                                    })
-//                            Var.Set
-//                                settingsVar 
-//                                {
-//                                    settingsVar.Value with
-//                                        Imgs =
-//                                            match settingsVar.Value.Imgs with
-//                                            | 7, 1 -> 6, 7
-//                                            | 1, 2 -> 7, 1
-//                                            | x, y -> x - 1, y - 1
-//                                })
-                    yield Doc.Link
-                        "Next"
-                        [Attr.Create "id" "next-slide"]
-                        (fun () ->
-                            match settingsVar.Value.Direction with
-                            | Backward -> Var.Set settingsVar {settingsVar.Value with Direction = Forward}
-                            | Forward ->
-                                Var.Set
-                                    settingsVar 
-                                    {
-                                        settingsVar.Value with
-                                            Imgs =
-                                                match settingsVar.Value.Imgs with
-                                                | 6, 7 -> 7, 1
-                                                | 7, 1 -> 1, 2
-                                                | x, y -> x + 1, y + 1
-                                            //Direction = Forward
-                                    })      
-                                      
-                ] 
-//            | true ->
-//                Doc.Concat [
-//                    Doc.Element
-//                        "img"
-//                        [
-//                            Attr.Create "src" <| "http://placekitten.com/200/200?image=" + string (snd settings.Imgs)
-//                            //Attr.Create
-//    //                        Attr.AnimatedStyle "opacity" fadeOutTrans (View.Const 0.) string
-//                        ]
-//                        []
-//                Doc.Element
-//                    "img"
-//                    [
-//                        Attr.Create "src" <| "http://placekitten.com/200/200?image=" + string (snd imgs)
-//                        Attr.AnimatedStyle "opacity" fadeInTrans (View.Const 1.) string
-//                    ]
-//                    []            
-//            ] 
+    let src id = Attr.Create "src" <| "http://placekitten.com/200/200?image=" + string id
 
+    let img attrs = Doc.Element "img" attrs []
+
+    let link text id handler =
+        Doc.Link
+            text
+            [Attr.Create "id" id]
+            handler
+
+    let setDirection settingsVal direction = Var.Set settingsVar {settingsVal with Direction = direction}
+
+    let incrementImgs settingsVal =
+        Var.Set
+            settingsVar 
+            {
+                settingsVal with
+                    Imgs =
+                        match settingsVal.Imgs with
+                        | 6, 7 -> 7, 1
+                        | 7, 1 -> 1, 2
+                        | x, y -> x + 1, y + 1
+            }
+
+    let render settings =
+        let imgs = settings.Imgs
+        Doc.Concat [
+            img [
+                yield src (fst imgs)
+                match settings.Direction with
+                | Forward -> yield opacityOut()
+                | Backward -> yield opacityIn()
+            ]
+            img [
+                yield src (snd imgs)
+                match settings.Direction with
+                | Forward -> yield opacityIn()
+                | Backward -> yield opacityOut()
+            ]
+            link
+                "Prev"
+                "prev-slide"
+                (fun () ->
+                    let settingsVal = Var.Get settingsVar
+                    match settingsVal.Direction with
+                    | Forward -> setDirection settingsVal Backward
+                    | Backward ->
+                        Var.Set
+                            settingsVar 
+                            {
+                                settingsVar.Value with
+                                    Imgs =
+                                        match settingsVar.Value.Imgs with
+                                        | 7, 1 -> 6, 7
+                                        | 1, 2 -> 7, 1
+                                        | x, y -> x - 1, y - 1
+                            })
+            link
+                "Next"
+                "next-slide"
+                (fun () ->
+                    let settingsVal = Var.Get settingsVar
+                    match settingsVal.Direction with
+                    | Backward -> setDirection settingsVal Forward
+                    | Forward -> incrementImgs settingsVal)
+        ]
+
+    let scrollTimer() =
+        JavaScript.SetInterval (fun () ->
+            Var.Get settingsVar
+            |> incrementImgs 
+        ) 2000
 
     let main() =
-        //View.FromVar imgs
-        View.Map render settingsVar.View
+        
+        View.FromVar settingsVar
+        |> View.Map render
         |> Doc.EmbedView
         |> Doc.RunById "slider"
 
         let timer =
-            JavaScript.SetInterval (fun () ->
-                let settingsVal = Var.Get settingsVar
-                match settingsVal.Hover with
-                | false ->
-                    match settingsVal.Imgs with
-                    | 6, 7 -> Var.Set settingsVar {settingsVal with Imgs = 7, 1}
-                    | 7, 1 -> Var.Set settingsVar {settingsVal with Imgs = 1, 2}
-                    | x, y -> Var.Set settingsVar {settingsVal with Imgs = x + 1, y + 1}
-                | true -> ()
-            ) 2000
+            scrollTimer()
             |> Var.Create
 
         JQuery.Of("#slider, #prev-slide, #next-slide").Hover(
-            (fun _ _ -> JavaScript.ClearInterval (Var.Get timer)), //Var.Set settings {settings.Value with Hover = true}),
-            (fun _ _ -> //Var.Set settings {settings.Value with Hover = false})
-                JavaScript.SetInterval (fun () ->
-                    let settingsVal = Var.Get settingsVar
-                    match settingsVal.Hover with
-                    | false ->
-//                        match settingsVal.Imgs with
-//                        | 6, 7 -> Var.Set settingsVar {settingsVal with Direction = Forward}
-//                        | 7, 1 -> Var.Set settingsVar {settingsVal with Direction = Forward}
-//                        | x, y -> Var.Set settingsVar {settingsVal with Direction = Forward}
-
-                        match settingsVal.Imgs with
-                        | 6, 7 -> Var.Set settingsVar {settingsVal with Imgs = 7, 1; Direction = Forward}
-                        | 7, 1 -> Var.Set settingsVar {settingsVal with Imgs = 1, 2; Direction = Forward}
-                        | x, y -> Var.Set settingsVar {settingsVal with Imgs = x + 1, y + 1; Direction = Forward}
-                    | true -> ()
-                ) 2000
+            (fun _ _ ->
+                Var.Get timer
+                |> JavaScript.ClearInterval),
+            (fun _ _ ->
+                let settingsVal = Var.Get settingsVar
+                match settingsVal.Direction with
+                | Backward -> setDirection settingsVal Forward
+                | _ -> ()
+                scrollTimer()
                 |> Var.Set timer)
-//                let settingsVal = Var.Get settings
-//                match settingsVal.Imgs with
-//                | 6, 7 -> Var.Set settings {settingsVal with Imgs = 7, 1; Hover = false}
-//                | 7, 1 -> Var.Set settings {settingsVal with Imgs = 1, 2; Hover = false}
-//                | x, y -> Var.Set settings {settingsVal with Imgs = x + 1, y + 1; Hover = false})
         ).Ignore
 
 [<JavaScript>]
@@ -633,7 +558,6 @@ module Client =
     open IntelliFactory.WebSharper.Html
     open IntelliFactory.WebSharper.D3
 
-    
     let main() =      
         let config = JQueryUI.SliderConfiguration()
         config.Max <- 60
@@ -645,61 +569,62 @@ module Client =
             let values = slider.Values
             Var.Set GoogleDashboard.age (values.[0], values.[1]))
         Div [Attr.Class "container"] -< [
-//            Div [Attr.Class "example"] -< [
-//                H1 [Text "Hello"; Attr.Class "page-header"]
-//                Div [Attr.Id "hello"]
-//            ]
-//            Hr []
-//            Div [Attr.Class "example"] -< [
-//                H1 [Text "Dynamic Scatterplot"; Attr.Class "page-header"]
-//                Div [Attr.Id "scatter"]
-//            ]
-//            Hr []
-//            Div [Attr.Class "example"] -< [
-//                H1 [Text "Phoneword"; Attr.Class "page-header"]
-//                Div [Attr.Id "phoneword"]
-//            ]
-//            Hr []
-//            Div [Attr.Class "example"] -< [
-//                H1 [Text "Bar"; Attr.Class "page-header"]
-//                Div [Attr.Id "bar"]
-//                Div [Attr.Id "bar-chart"]
-//            ]
-//            Hr []
-//            Div [Attr.Class "example"] -< [
-//                H1 [Text "Google Dashboard"; Attr.Class "page-header"]
-//                Div [Attr.Class "row"; Attr.Style "margin-bottom:50px;"] -< [
-//                    Div [Attr.Class "col-md-6"] -< [
-//                        Div [Attr.Id "min-max"]
-//                        Div [slider]
-//                    ]        
-//                    Div [Attr.Class "col-md-6"] -< [
-//                        Div [Attr.Id "google-dash"]
-//                    ]
-//                ]
-//                Div [Attr.Class "row"] -< [
-//                    Div [Attr.Class "col-md-6"] -< [
-//                        Div [Attr.Style "height: 400px;"; Attr.Id "google-pie"]
-//
-//                    ]        
-//                    Div [Attr.Class "col-md-6"] -< [
-//                        Div [Attr.Style "height: 400px;"; Attr.Id "google-table"]
-//                    ]
-//                ]
-//                Div [Attr.Id "google"]
-//            ]
             Div [Attr.Class "example"] -< [
-                H1 [Text "Slider"; Attr.Class "page-header"]
+                H1 [Text "Hello"; Attr.Class "page-header"]
+                Div [Attr.Id "hello"]
+            ]
+            Hr []
+            Div [Attr.Class "example"] -< [
+                H1 [Text "Dynamic Scatterplot"; Attr.Class "page-header"]
+                Div [Attr.Id "scatter"]
+            ]
+            Hr []
+            Div [Attr.Class "example"] -< [
+                H1 [Text "Phoneword"; Attr.Class "page-header"]
+                Div [Attr.Id "phoneword"]
+            ]
+            Hr []
+            Div [Attr.Class "example"] -< [
+                H1 [Text "Column Chart"; Attr.Class "page-header"]
+                Div [Attr.Id "bar"]
+                Div [Attr.Id "bar-chart"]
+            ]
+            Hr []
+            Div [Attr.Class "example"] -< [
+                H1 [Text "Google Dashboard"; Attr.Class "page-header"]
+                Div [Attr.Class "row"; Attr.Style "margin-bottom:50px;"] -< [
+                    Div [Attr.Class "col-md-6"] -< [
+                        Div [Text "Age Selection"]
+                        Div [Attr.Id "min-max"; Attr.Style "margin-bottom:5px;"]
+                        Div [slider]
+                    ]        
+                    Div [Attr.Class "col-md-6"] -< [
+                        Div [Attr.Id "google-dash"]
+                    ]
+                ]
+                Div [Attr.Class "row"] -< [
+                    Div [Attr.Class "col-md-6"] -< [
+                        Div [Attr.Style "height: 400px;"; Attr.Id "google-pie"]
+
+                    ]        
+                    Div [Attr.Class "col-md-6"] -< [
+                        Div [Attr.Style "height: 400px;"; Attr.Id "google-table"]
+                    ]
+                ]
+                Div [Attr.Id "google"]
+            ]
+            Div [Attr.Class "example"] -< [
+                H1 [Text "Image Slider"; Attr.Class "page-header"]
                 Div [Attr.Id "slider-container"] -< [
                     Div [Attr.Id "slider"]
                 ]
             ]
         ]
         |>! OnAfterRender(fun _ ->
-//            Doc.RunById "hello" <| Hello.main()
-//            Scatter.main()
-//            Doc.RunById "phoneword" <| Phoneword.main()
-//            Bar.main()
-//            GoogleDashboard.main()
+            Doc.RunById "hello" <| Hello.main()
+            Scatter.main()
+            Doc.RunById "phoneword" <| Phoneword.main()
+            Bar.main()
+            GoogleDashboard.main()
             Slider.main()
         )
