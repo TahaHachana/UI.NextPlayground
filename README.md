@@ -1,0 +1,1 @@
+First experiments with WebSharper's [UI.Next](https://github.com/intellifactory/websharper.ui.next) project.
