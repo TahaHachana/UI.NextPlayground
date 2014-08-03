@@ -113,10 +113,7 @@
   <ItemGroup>
     <Compile Include="Client.fs" />
     <Compile Include="Main.fs" />
-    <Content Include="Main.html" />
-    <Content Include="Setup.fsx" />
     <None Include="packages.config" />
-    <None Include="style.css" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="IntelliFactory.WebSharper.D3">

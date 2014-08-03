@@ -178,15 +178,15 @@
        return Var.Set(arg00,arg10);
       }))([values[0],values[1]]);
      });
-     x=Operators.add(Default.Div(List.ofArray([Default.Attr().Class("container")])),List.ofArray([Operators.add(Default.Div(List.ofArray([Default.Attr().Class("example")])),List.ofArray([Default.H1(List.ofArray([Default.Text("Hello"),Default.Attr().Class("page-header")])),Default.Div(List.ofArray([Default.Attr().NewAttr("id","hello")]))])),Default.Hr(Runtime.New(T,{
+     x=Operators.add(Default.Div(List.ofArray([Default.Attr().Class("container")])),List.ofArray([Operators.add(Default.Div(List.ofArray([Default.Attr().Class("example"),Default.Attr().NewAttr("id","hello-world")])),List.ofArray([Default.H1(List.ofArray([Default.Text("Hello"),Default.Attr().Class("page-header")])),Default.Div(List.ofArray([Default.Attr().NewAttr("id","hello")]))])),Default.Hr(Runtime.New(T,{
       $:0
-     })),Operators.add(Default.Div(List.ofArray([Default.Attr().Class("example")])),List.ofArray([Default.H1(List.ofArray([Default.Text("Dynamic Scatterplot"),Default.Attr().Class("page-header")])),Default.Div(List.ofArray([Default.Attr().NewAttr("id","scatter")]))])),Default.Hr(Runtime.New(T,{
+     })),Operators.add(Default.Div(List.ofArray([Default.Attr().Class("example"),Default.Attr().NewAttr("id","dynamic-scatterplot")])),List.ofArray([Default.H1(List.ofArray([Default.Text("Dynamic Scatterplot"),Default.Attr().Class("page-header")])),Default.Div(List.ofArray([Default.Attr().NewAttr("id","scatter")]))])),Default.Hr(Runtime.New(T,{
       $:0
-     })),Operators.add(Default.Div(List.ofArray([Default.Attr().Class("example")])),List.ofArray([Default.H1(List.ofArray([Default.Text("Phoneword"),Default.Attr().Class("page-header")])),Default.Div(List.ofArray([Default.Attr().NewAttr("id","phoneword")]))])),Default.Hr(Runtime.New(T,{
+     })),Operators.add(Default.Div(List.ofArray([Default.Attr().Class("example"),Default.Attr().NewAttr("id","translate-phoneword")])),List.ofArray([Default.H1(List.ofArray([Default.Text("Phoneword"),Default.Attr().Class("page-header")])),Default.Div(List.ofArray([Default.Attr().NewAttr("id","phoneword")]))])),Default.Hr(Runtime.New(T,{
       $:0
-     })),Operators.add(Default.Div(List.ofArray([Default.Attr().Class("example")])),List.ofArray([Default.H1(List.ofArray([Default.Text("Column Chart"),Default.Attr().Class("page-header")])),Default.Div(List.ofArray([Default.Attr().NewAttr("id","bar")])),Default.Div(List.ofArray([Default.Attr().NewAttr("id","bar-chart")]))])),Default.Hr(Runtime.New(T,{
+     })),Operators.add(Default.Div(List.ofArray([Default.Attr().Class("example"),Default.Attr().NewAttr("id","column-chart")])),List.ofArray([Default.H1(List.ofArray([Default.Text("Column Chart"),Default.Attr().Class("page-header")])),Default.Div(List.ofArray([Default.Attr().NewAttr("id","bar")])),Default.Div(List.ofArray([Default.Attr().NewAttr("id","bar-chart")]))])),Default.Hr(Runtime.New(T,{
       $:0
-     })),Operators.add(Default.Div(List.ofArray([Default.Attr().Class("example")])),List.ofArray([Default.H1(List.ofArray([Default.Text("Google Dashboard"),Default.Attr().Class("page-header")])),Operators.add(Default.Div(List.ofArray([Default.Attr().Class("row"),Default.Attr().NewAttr("style","margin-bottom:50px;")])),List.ofArray([Operators.add(Default.Div(List.ofArray([Default.Attr().Class("col-md-6")])),List.ofArray([Default.Div(List.ofArray([Default.Text("Age Selection")])),Default.Div(List.ofArray([Default.Attr().NewAttr("id","min-max"),Default.Attr().NewAttr("style","margin-bottom:5px;")])),Default.Div(List.ofArray([slider]))])),Operators.add(Default.Div(List.ofArray([Default.Attr().Class("col-md-6")])),List.ofArray([Default.Div(List.ofArray([Default.Attr().NewAttr("id","google-dash")]))]))])),Operators.add(Default.Div(List.ofArray([Default.Attr().Class("row")])),List.ofArray([Operators.add(Default.Div(List.ofArray([Default.Attr().Class("col-md-6")])),List.ofArray([Default.Div(List.ofArray([Default.Attr().NewAttr("style","height: 400px;"),Default.Attr().NewAttr("id","google-pie")]))])),Operators.add(Default.Div(List.ofArray([Default.Attr().Class("col-md-6")])),List.ofArray([Default.Div(List.ofArray([Default.Attr().NewAttr("style","height: 400px;"),Default.Attr().NewAttr("id","google-table")]))]))])),Default.Div(List.ofArray([Default.Attr().NewAttr("id","google")]))])),Operators.add(Default.Div(List.ofArray([Default.Attr().Class("example")])),List.ofArray([Default.H1(List.ofArray([Default.Text("Image Slider"),Default.Attr().Class("page-header")])),Operators.add(Default.Div(List.ofArray([Default.Attr().NewAttr("id","slider-container")])),List.ofArray([Default.Div(List.ofArray([Default.Attr().NewAttr("id","slider")]))]))]))]));
+     })),Operators.add(Default.Div(List.ofArray([Default.Attr().Class("example"),Default.Attr().NewAttr("id","google-dashboard")])),List.ofArray([Default.H1(List.ofArray([Default.Text("Google Dashboard"),Default.Attr().Class("page-header")])),Operators.add(Default.Div(List.ofArray([Default.Attr().Class("row"),Default.Attr().NewAttr("style","margin-bottom:50px;")])),List.ofArray([Operators.add(Default.Div(List.ofArray([Default.Attr().Class("col-md-6")])),List.ofArray([Default.Div(List.ofArray([Default.Text("Age Selection")])),Default.Div(List.ofArray([Default.Attr().NewAttr("id","min-max"),Default.Attr().NewAttr("style","margin-bottom:5px;")])),Default.Div(List.ofArray([slider]))])),Operators.add(Default.Div(List.ofArray([Default.Attr().Class("col-md-6")])),List.ofArray([Default.Div(List.ofArray([Default.Attr().NewAttr("id","google-dash")]))]))])),Operators.add(Default.Div(List.ofArray([Default.Attr().Class("row")])),List.ofArray([Operators.add(Default.Div(List.ofArray([Default.Attr().Class("col-md-6")])),List.ofArray([Default.Div(List.ofArray([Default.Attr().NewAttr("style","height: 400px;"),Default.Attr().NewAttr("id","google-pie")]))])),Operators.add(Default.Div(List.ofArray([Default.Attr().Class("col-md-6")])),List.ofArray([Default.Div(List.ofArray([Default.Attr().NewAttr("style","height: 400px;"),Default.Attr().NewAttr("id","google-table")]))]))])),Default.Div(List.ofArray([Default.Attr().NewAttr("id","google")]))])),Operators.add(Default.Div(List.ofArray([Default.Attr().Class("example"),Default.Attr().NewAttr("id","image-slider")])),List.ofArray([Default.H1(List.ofArray([Default.Text("Image Slider"),Default.Attr().Class("page-header")])),Operators.add(Default.Div(List.ofArray([Default.Attr().NewAttr("id","slider-container")])),List.ofArray([Default.Div(List.ofArray([Default.Attr().NewAttr("id","slider")]))]))]))]));
      Operators.OnAfterRender(function()
      {
       Doc.RunById("hello",Hello.main());
@@ -631,14 +631,14 @@
     },
     fade:Runtime.Field(function()
     {
-     var _arg00_433_3,_arg10_433_1;
-     _arg00_433_3=Interpolation.get_Double();
-     _arg10_433_1=Easing.get_CubicInOut();
+     var _arg00_445_3,_arg10_445_1;
+     _arg00_445_3=Interpolation.get_Double();
+     _arg10_445_1=Easing.get_CubicInOut();
      return function(arg30)
      {
       return function(arg40)
       {
-       return An.Simple(_arg00_433_3,_arg10_433_1,1000,arg30,arg40);
+       return An.Simple(_arg00_445_3,_arg10_445_1,1000,arg30,arg40);
       };
      };
     }),

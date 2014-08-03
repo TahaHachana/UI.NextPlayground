@@ -1,3 +1,15 @@
+(*
+
+=====================================================================
+These are my first experiments with the project. Don't treat the code
+as a reference on how to write UI.Next components.
+=====================================================================
+
+*)
+
+
+
+
 namespace Sitelet
 
 open IntelliFactory.WebSharper
@@ -569,28 +581,28 @@ module Client =
             let values = slider.Values
             Var.Set GoogleDashboard.age (values.[0], values.[1]))
         Div [Attr.Class "container"] -< [
-            Div [Attr.Class "example"] -< [
+            Div [Attr.Class "example"; Attr.Id "hello-world"] -< [
                 H1 [Text "Hello"; Attr.Class "page-header"]
                 Div [Attr.Id "hello"]
             ]
             Hr []
-            Div [Attr.Class "example"] -< [
+            Div [Attr.Class "example"; Attr.Id "dynamic-scatterplot"] -< [
                 H1 [Text "Dynamic Scatterplot"; Attr.Class "page-header"]
                 Div [Attr.Id "scatter"]
             ]
             Hr []
-            Div [Attr.Class "example"] -< [
+            Div [Attr.Class "example"; Attr.Id "translate-phoneword"] -< [
                 H1 [Text "Phoneword"; Attr.Class "page-header"]
                 Div [Attr.Id "phoneword"]
             ]
             Hr []
-            Div [Attr.Class "example"] -< [
+            Div [Attr.Class "example"; Attr.Id "column-chart"] -< [
                 H1 [Text "Column Chart"; Attr.Class "page-header"]
                 Div [Attr.Id "bar"]
                 Div [Attr.Id "bar-chart"]
             ]
             Hr []
-            Div [Attr.Class "example"] -< [
+            Div [Attr.Class "example"; Attr.Id "google-dashboard"] -< [
                 H1 [Text "Google Dashboard"; Attr.Class "page-header"]
                 Div [Attr.Class "row"; Attr.Style "margin-bottom:50px;"] -< [
                     Div [Attr.Class "col-md-6"] -< [
@@ -613,7 +625,7 @@ module Client =
                 ]
                 Div [Attr.Id "google"]
             ]
-            Div [Attr.Class "example"] -< [
+            Div [Attr.Class "example"; Attr.Id "image-slider"] -< [
                 H1 [Text "Image Slider"; Attr.Class "page-header"]
                 Div [Attr.Id "slider-container"] -< [
                     Div [Attr.Id "slider"]
